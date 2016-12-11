@@ -14,6 +14,7 @@ obj/*
 */xx_Not4git*
 
 *.csproj
+*.apk
 *.unityproj
 *.sln
 *.userprefs
