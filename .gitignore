@@ -1,0 +1,30 @@
+Temp/*
+Library/*
+Build/*
+bin/*
+obj/*
+
+!Library/EditorUserBuildSettings.asset.*
+
+# ignoring pidb, they are just code completion caching data according to:
+# http://stackoverflow.com/questions/1022111/what-are-monodevelops-pidb-files
+*.pidb
+*.userprefs
+
+*/xx_Not4git*
+
+*.csproj
+*.unityproj
+*.sln
+*.userprefs
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+UnityVS.*
+*.pfx*
