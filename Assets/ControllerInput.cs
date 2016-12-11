@@ -6,6 +6,7 @@ public class ControllerInput : MonoBehaviour {
 	// Use this for initialization
 	public GameObject controllerPivot;
 	public GameObject TeleportSystem;
+	public GameObject SwordRay;
 
 	// Update is called once per frame
 	IEnumerator TeleportCourutine()
@@ -30,6 +31,16 @@ public class ControllerInput : MonoBehaviour {
 		}
 		controllerPivot.SetActive(true);
 		controllerPivot.transform.rotation = GvrController.Orientation;
+
+		int Layermask = 1 << 8;
+		Ray ray = new Ray (SwordRay.transform.position, SwordRay.transform.forward);
+		Debug.DrawRay (SwordRay.transform.position, SwordRay.transform.forward*100f);
+		RaycastHit hit;
+
+		if (Physics.Raycast (ray, out hit,100f,Layermask))
+		if (hit.collider != null)
+			Debug.LogError (hit.collider.gameObject.name);
+				
 
 
 		if (Input.GetMouseButtonDown (0)) 
