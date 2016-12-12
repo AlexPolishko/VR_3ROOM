@@ -12,6 +12,7 @@ public class TeleportScript : MonoBehaviour {
 	Quaternion PlayerLocalRotation;
 	private static bool isTeleportation;
 	public GameObject TeleportSystem;
+	public float TeleportJumpMoment =0.1f;
 	public static TeleportScript GetInstance()
 	{
 		return _instance;
@@ -34,6 +35,12 @@ public class TeleportScript : MonoBehaviour {
 
 		Player.transform.localPosition = PlayerLocalPosition;
 		Player.transform.localRotation = PlayerLocalRotation;
+
+		for (int i = 0; i < 3; i++)
+			if (i == RoomNo)
+				Rooms [i].SetActive (true);
+			else
+				Rooms [i].SetActive (false);
 	}
 
 	IEnumerator TeleportCourutine(int RoomNo)
@@ -43,11 +50,11 @@ public class TeleportScript : MonoBehaviour {
 		Debug.Log ("Teleport Start");
 		TeleportSystem.SetActive (true);
 		float TeleportHeight = -2f;
-		while (TeleportHeight<3f)
+		while (TeleportHeight<2f)
 		{
 			TeleportHeight += Time.deltaTime;
 			TeleportSystem.transform.localPosition = new Vector3 (0f, TeleportHeight, 0f);
-			if ((TeleportHeight > 1.5f) && (!jump))
+			if ((TeleportHeight > TeleportJumpMoment) && (!jump))
 				TeleportScript.GetInstance ().JumptoRoom (RoomNo);
 			yield return null;
 		}
@@ -61,7 +68,8 @@ public class TeleportScript : MonoBehaviour {
 		{
 			StopAllCoroutines ();
 			TeleportSystem.transform.localPosition = new Vector3 (0f, -1f, 0f);
-			TeleportSystem.GetComponent<AudioSource> ().Play ();
+			//TeleportSystem.GetComponent<AudioSource> ().Play ();
+			Debug.Log ("Play");
 			StartCoroutine (TeleportCourutine (RoomNo));
 		}
 	}
