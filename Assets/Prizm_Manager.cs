@@ -3,23 +3,11 @@ using System.Collections;
 
 public class Prizm_Manager : MonoBehaviour {
 
-	private static Prizm_Manager _instance;
-	public static Prizm_Manager GetInstance()
-	{
-			return _instance;
-	}
 
-	void Awake()
-	{
-		_instance = this;
-	}
 
 	public int CurrentRoomNo;
-	private ControllerInput controllerInput;
-	public void SetContreollerInput(ControllerInput _ControllerInput)
-	{
-		controllerInput = _ControllerInput;
-	}
+	public static float LEVEL_OF_BEAM = 0.4f;
+
 	// Use this for initialization
 	public GameObject[] Prizms;
 	public Material[] PrizmsMaterials;
@@ -53,8 +41,8 @@ public class Prizm_Manager : MonoBehaviour {
 		if (Prizms [number].transform.localPosition.z<0.6f)
 		Prizms [number].transform.Translate (new Vector3 (0f, 0f,Time.deltaTime));
 
-		if (Prizms [number].transform.localPosition.z < 0.5f)
-			controllerInput.StartTeleport (number);
+		if (Prizms [number].transform.localPosition.z >LEVEL_OF_BEAM)
+			TeleportScript.GetInstance().StartTeleport (number);
 			
 	}
 	void UnPressed(int number)
@@ -90,7 +78,7 @@ public class Prizm_Manager : MonoBehaviour {
 	// Update is called once per frame
 	public void PrizmSelected(string nameselected, bool isTouch)
 	{
-		
+		if (!TeleportScript.IsTeleportation())
 		for (int i = 0; i < 3; i++) 
 		{
 			if (i != CurrentRoomNo) 
