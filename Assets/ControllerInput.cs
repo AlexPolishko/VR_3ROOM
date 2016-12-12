@@ -37,10 +37,11 @@ public class ControllerInput : MonoBehaviour {
 		Debug.DrawRay (SwordRay.transform.position, SwordRay.transform.forward*100f);
 		RaycastHit hit;
 
-		if (Physics.Raycast (ray, out hit,100f,Layermask))
+		if (Physics.Raycast (ray, out hit, 100f, Layermask))
 		if (hit.collider != null)
-			Debug.LogError (hit.collider.gameObject.name);
-				
+			Prizm_Manager.GetInstance ().PrizmHighlighted (hit.collider.gameObject.name);
+		else 
+			Prizm_Manager.GetInstance ().PrizmHighlighted ("none");
 
 
 		if (Input.GetMouseButtonDown (0)) 
