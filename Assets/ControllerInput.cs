@@ -7,6 +7,7 @@ public class ControllerInput : MonoBehaviour {
 	public GameObject controllerPivot;
 	public GameObject TeleportSystem;
 	public GameObject SwordRay;
+	public ParticleSystem SwordParticle1;
 
 	// Update is called once per frame
 	IEnumerator TeleportCourutine()
@@ -18,11 +19,14 @@ public class ControllerInput : MonoBehaviour {
 		{
 			TeleportHeight += Time.deltaTime;
 			TeleportSystem.transform.localPosition = new Vector3 (0f, TeleportHeight, 0f);
-			Debug.Log ("Teleport Finish "+TeleportHeight.ToString());
 			yield return null;
 		}
 		TeleportSystem.SetActive (false);
 		Debug.Log ("Teleport Finish");
+	}
+	void Start()
+	{
+		Prizm_Manager.GetInstance ().SetContreollerInput (this);
 	}
 
 	void Update () {
@@ -37,16 +41,22 @@ public class ControllerInput : MonoBehaviour {
 		Debug.DrawRay (SwordRay.transform.position, SwordRay.transform.forward*100f);
 		RaycastHit hit;
 
-		if (Physics.Raycast (ray, out hit, 100f, Layermask))
-		if (hit.collider != null)
-			Prizm_Manager.GetInstance ().PrizmSelected (hit.collider.gameObject.name,GvrController.IsTouching);
+		if (Physics.Raycast (ray, out hit, 100f, Layermask)) 
+		{
+			if (hit.collider != null) 
+			{
+				Prizm_Manager.GetInstance ().PrizmSelected (hit.collider.gameObject.name, GvrController.IsTouching);
+
+			}
+		}
 		else 
 			Prizm_Manager.GetInstance ().PrizmSelected ("none",false);
+		
+	}
 
-		if (Input.GetMouseButtonDown (0)) 
-		{
-			Debug.Log ("Teleport");
-			StartCoroutine (TeleportCourutine());
-		}
+	public void StartTeleport(int roomNo)
+	{
+		StopCoroutine  (TeleportCourutine());
+		StartCoroutine (TeleportCourutine());
 	}
 }

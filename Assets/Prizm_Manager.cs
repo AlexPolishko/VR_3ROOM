@@ -13,6 +13,13 @@ public class Prizm_Manager : MonoBehaviour {
 	{
 		_instance = this;
 	}
+
+	public int CurrentRoomNo;
+	private ControllerInput controllerInput;
+	public void SetContreollerInput(ControllerInput _ControllerInput)
+	{
+		controllerInput = _ControllerInput;
+	}
 	// Use this for initialization
 	public GameObject[] Prizms;
 	public Material[] PrizmsMaterials;
@@ -41,10 +48,14 @@ public class Prizm_Manager : MonoBehaviour {
 		PrizmsMaterials [number].SetColor ("_EmissionColor", c); 
 	}
 
-	void Pressed(int number)
+	void Pressed(int number)	// Push prizm
 	{
-		if (Prizms [number].transform.localPosition.z<0.7f)
+		if (Prizms [number].transform.localPosition.z<0.6f)
 		Prizms [number].transform.Translate (new Vector3 (0f, 0f,Time.deltaTime));
+
+		if (Prizms [number].transform.localPosition.z < 0.5f)
+			controllerInput.StartTeleport (number);
+			
 	}
 	void UnPressed(int number)
 	{
@@ -52,7 +63,7 @@ public class Prizm_Manager : MonoBehaviour {
 		Prizms [number].transform.Translate (new Vector3 (0f, 0f,-Time.deltaTime));
 	}
 
-	void FadeOut(int number) {
+	void FadeOut(int number) {	// fade out prizm form white to color
 		if (Levels[number] > 0f) 
 		{
 			Levels[number] -= Time.deltaTime;
@@ -69,30 +80,31 @@ public class Prizm_Manager : MonoBehaviour {
 		}
 	void Start () {
 
-			PrizmsMaterials [0].SetColor ("_EmissionColor", Color.red);
+		PrizmsMaterials [0].SetColor ("_EmissionColor", Color.red);
 		PrizmsMaterials [1].SetColor ("_EmissionColor",Color.blue);
 		PrizmsMaterials [2].SetColor ("_EmissionColor", Color.green);
+		Prizms [CurrentRoomNo].transform.localPosition = new Vector3 (Prizms [CurrentRoomNo].transform.localPosition.x,Prizms [CurrentRoomNo].transform.localPosition.y,0.7f);
+
 	}
 	
 	// Update is called once per frame
 	public void PrizmSelected(string nameselected, bool isTouch)
 	{
 		
-
 		for (int i = 0; i < 3; i++) 
 		{
-				
-			if (Prizms [i].name == nameselected) {
-				Debug.LogError (nameselected+" "+isTouch.ToString());
-				FadeIn (i);
-				if (isTouch)
-					Pressed (i);
-				else
-					UnPressed (i);
-			} else 
+			if (i != CurrentRoomNo) 
 			{
-				FadeOut (i);
-				UnPressed (i);
+				if (Prizms [i].name == nameselected) {
+					FadeIn (i);
+					if (isTouch)
+						Pressed (i);
+					else
+						UnPressed (i);
+				} else {
+					FadeOut (i);
+					UnPressed (i);
+				}
 			}
 		}
 	}
