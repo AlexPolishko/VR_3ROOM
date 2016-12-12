@@ -60,7 +60,8 @@ public class TeleportScript : MonoBehaviour {
 		if (!IsTeleportation()) 
 		{
 			StopAllCoroutines ();
-			TeleportSystem.transform.localPosition = new Vector3 (0f, -2f, 0f);
+			TeleportSystem.transform.localPosition = new Vector3 (0f, -1f, 0f);
+			TeleportSystem.GetComponent<AudioSource> ().Play ();
 			StartCoroutine (TeleportCourutine (RoomNo));
 		}
 	}
