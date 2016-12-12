@@ -41,6 +41,17 @@ public class Prizm_Manager : MonoBehaviour {
 		PrizmsMaterials [number].SetColor ("_EmissionColor", c); 
 	}
 
+	void Pressed(int number)
+	{
+		if (Prizms [number].transform.localPosition.z<0.7f)
+		Prizms [number].transform.Translate (new Vector3 (0f, 0f,Time.deltaTime));
+	}
+	void UnPressed(int number)
+	{
+		if (Prizms [number].transform.localPosition.z>0f)
+		Prizms [number].transform.Translate (new Vector3 (0f, 0f,-Time.deltaTime));
+	}
+
 	void FadeOut(int number) {
 		if (Levels[number] > 0f) 
 		{
@@ -58,24 +69,34 @@ public class Prizm_Manager : MonoBehaviour {
 		}
 	void Start () {
 
-		PrizmsMaterials [0].SetColor ("_EmissionColor", Color.red);
+			PrizmsMaterials [0].SetColor ("_EmissionColor", Color.red);
 		PrizmsMaterials [1].SetColor ("_EmissionColor",Color.blue);
 		PrizmsMaterials [2].SetColor ("_EmissionColor", Color.green);
 	}
 	
 	// Update is called once per frame
-	public void PrizmHighlighted(string nameselected)
+	public void PrizmSelected(string nameselected, bool isTouch)
 	{
 		
 
 		for (int i = 0; i < 3; i++) 
 		{
-			
-			if (Prizms [i].name == nameselected)
-					FadeIn (i);
-			else
-				FadeOut(i);
+				
+			if (Prizms [i].name == nameselected) {
+				Debug.LogError (nameselected+" "+isTouch.ToString());
+				FadeIn (i);
+				if (isTouch)
+					Pressed (i);
+				else
+					UnPressed (i);
+			} else 
+			{
+				FadeOut (i);
+				UnPressed (i);
+			}
 		}
 	}
+
+
 
 }

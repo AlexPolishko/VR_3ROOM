@@ -39,10 +39,9 @@ public class ControllerInput : MonoBehaviour {
 
 		if (Physics.Raycast (ray, out hit, 100f, Layermask))
 		if (hit.collider != null)
-			Prizm_Manager.GetInstance ().PrizmHighlighted (hit.collider.gameObject.name);
+			Prizm_Manager.GetInstance ().PrizmSelected (hit.collider.gameObject.name,GvrController.IsTouching);
 		else 
-			Prizm_Manager.GetInstance ().PrizmHighlighted ("none");
-
+			Prizm_Manager.GetInstance ().PrizmSelected ("none",false);
 
 		if (Input.GetMouseButtonDown (0)) 
 		{
